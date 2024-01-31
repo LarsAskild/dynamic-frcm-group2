@@ -1,0 +1,9 @@
+
+New client credentials have been successfully created for email address 587850@stud.hvl.no. Your client ID is:
+
+871a353d-953a-4144-aac1-8c2cb35cc809
+
+
+Your client Secret is:
+
+47698388-a37b-4bcd-af8c-9cfd1e0dc4f7
