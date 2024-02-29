@@ -1,6 +1,7 @@
 import requests
 import datetime
 import json
+import sqlite3
 
 # see .env.example.py in the root dir.
 from decouple import config
@@ -127,7 +128,38 @@ class METClient(WeatherDataClient):
         response = self.fetch_observations_raw(station_id, start, end)
 
 #        print(response.text)
+        
 
         observations = self.extractor.extract_observations(response.text, location)
+        print(observations.data[0].temperature)
+        return observations
+    
+  
+    
+    def fetch_observations(self, location: Location, start: datetime.datetime, end: datetime.datetime) -> Observations:
+        station_id = self.get_nearest_station_id(location)
+        response = self.fetch_observations_raw(station_id, start, end)
+        observations = self.extractor.extract_observations(response.text, location)
+
+        # Connect to the SQLite database
+        conn = sqlite3.connect('your_database.db')
+        cursor = conn.cursor()
+
+        # Loop through each observation and insert it into the database
+        for observation in observations:
+            # Create the SQLite INSERT query
+            query = INSERT INTO observations (timestamp, temperature, humidity, wind_speed, location_id)
+            VALUES (?, ?, ?, ?, ?)
+            values = (observation.timestamp, observation.temperature, observation.humidity, observation.wind_speed, location.id)
+
+            # Execute the query
+            cursor.execute(query, values)
+
+        # Commit the changes to the database
+        conn.commit()
+
+        # Close the database connection
+        conn.close()
 
         return observations
+"""
