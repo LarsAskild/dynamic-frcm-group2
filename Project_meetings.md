@@ -11,7 +11,7 @@ Fire Guard API project
 
 #### Previous meetings
 - Torsdag 29.02.2024 Fysisk D425
-- [ ] fr 
+  - [ ] fr 
 - Onsdag 28.02.2024 Fysisk D425
 - Onsdag 21.02.2024 Fysisk D425
 - Onsdag 14.02.2024 Fysisk D425
