@@ -15,7 +15,11 @@ Fire Guard API project
 - Onsdag 24.01.2024 Fysisk D425
 - Tirsdag 23.01.2024 Zoom 
 
-   
+
+#### Presentation dates
+- Fredag 02.02.2024 SPRINT 1 presentation
+- Fredag 01.03.2024 SPRINT 2 presentation
+  
 ## Overarching project tasks
 - [x] Publish tasks.
 - [x] Interface topology (All)
