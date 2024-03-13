@@ -1,0 +1,57 @@
+# The file is formatted as a YAML file, have a look at the following URL if you need a refresher on thi file format:
+# https://learnxinyminutes.com/docs/yaml/
+
+# "GitHub Actions" is CI/CD platform offered by GitHub 
+# it is configured via creating "workflows" (i.e. YAML files) and placing them 
+# in the folder ".github/workflows/" beneath the repository root.
+# A workflow may define multiple "jobs" where each job consists of multiple "steps".
+# Each "step" performs an action of a CI-pipeline, e.g. installing dependencies, compiling, testing, etc.
+#
+# The contents of the YAML config file are well documented, start reading the documentation here:
+# https://docs.github.com/en/actions/learn-github-actions/understanding-github-actions#overview
+
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+
+# The name under wich the workflow appears in the "Actions" tab in your repository.
+name: CI Pipeline
+
+# Defines the "trigger" on which a workflow should run 
+#
+# Look here for a complete list possible triggers:
+# https://docs.github.com/en/actions/learn-github-actions/understanding-github-actions#overview
+on:
+  push:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.12
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.12"
+    - name: Install Poetry
+      run: |
+        python -m pip install --upgrade pip
+        pip install --user pipx
+        pipx install poetry
+    - name: Install dependencies
+      run: |
+        poetry install
+        poetry install --with test
+    - name: Unit Test with pytest
+      run: |
+        poetry run pytest tests
+    - name: Integration Test with pytest
+      run: |
+        poetry run pytest integ_tests
+      env:
+        MET_CLIENT_ID: ${{ secrets.MET_CLIENT_ID }}
