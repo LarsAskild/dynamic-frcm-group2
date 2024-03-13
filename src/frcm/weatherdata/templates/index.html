@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Address to Coordinates</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Address to Coordinates</h1>
+    <form id="addressForm">
+        <label for="addressInput">Enter Address:</label>
+        <input type="text" id="addressInput" name="address" required>
+        <button type="submit">Get Coordinates</button>
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+        document.getElementById("addressForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            var address = document.getElementById("addressInput").value;
+            getAddressCoordinates(address);
+        });
+
+        function getAddressCoordinates(address) {
+            fetch(`/coordinates?address=${encodeURIComponent(address)}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    document.getElementById("result").innerHTML = `<p>${data.error}</p>`;
+                } else {
+                    document.getElementById("result").innerHTML = `<p>Latitude: ${data.latitude}</p><p>Longitude: ${data.longitude}</p>`;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById("result").innerHTML = `<p>Something went wrong. Please try again later.</p>`;
+            });
+        }
+    </script>
+</body>
+</html>
