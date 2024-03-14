@@ -55,8 +55,8 @@ jobs:
       run: |
         poetry run pytest tests
     - name: Integration Test with pytest
-      run: |
-        poetry run pytest integ_tests
       env:
         MET_CLIENT_ID: ${{ secrets.MET_CLIENT_ID }}
         MET_CLIENT_SECRET: ${{ secrets.MET_CLIENT_SECRET }}
+      run: |
+        poetry run pytest integ_tests
