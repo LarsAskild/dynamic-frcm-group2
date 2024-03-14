@@ -61,7 +61,7 @@ class FireRiskAPI:
         conn.commit()
         conn.close()
         
-        return 
+        return prediction
 
     def compute_now_period(self, location: Location, obs_delta: datetime.timedelta, fct_delta: datetime.timedelta):
         pass
