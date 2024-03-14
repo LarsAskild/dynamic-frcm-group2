@@ -46,17 +46,21 @@ class FireRiskAPI:
             
         #TODO: Implementere korrekt loop ovenfor
         #print(data)
-        conn = sqlite3.connect('../FireGuard_DB.sql')
+        conn = sqlite3.connect('FireGuard_DB.sql')
         cursor = conn.cursor()
 
         #TODO Send til database. sqlite-> cursor -> insert
+        latitude = location.latitude
+        longitude = location.longitude
+        
         data_to_insert = [( entry["temperature"], entry["humidity"], entry["wind_speed"], entry["timestamp"]) for entry in data["observations"]["data"]]
         
         cursor.executemany('''
-        INSERT INTO weatherdata (location, temperature, humidity, wind_speed, timestamp) VALUES (?, ?, ?, ?, ?)''',location, data_to_insert)
+        INSERT INTO weatherdata (latitude, longitude, temperature, humidity, wind_speed, timestamp) VALUES (?, ?, ?, ?, ?, ?)''',[(latitude, longitude,) + entry for entry in data_to_insert])
         
         conn.commit()
         conn.close()
+        
         return 
 
     def compute_now_period(self, location: Location, obs_delta: datetime.timedelta, fct_delta: datetime.timedelta):
