@@ -1,8 +1,8 @@
 import datetime
 
+
 from frcm.weatherdata.extractor_met import METExtractor
 from frcm.weatherdata.client_met import METClient
-
 from frcm.datamodel.model import Location
 
 import unittest

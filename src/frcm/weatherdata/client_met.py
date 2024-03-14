@@ -140,7 +140,8 @@ class METClient(WeatherDataClient):
         station_id = self.get_nearest_station_id(location)
         response = self.fetch_observations_raw(station_id, start, end)
         observations = self.extractor.extract_observations(response.text, location)
-
+        return observations
+    """
         # Connect to the SQLite database
         conn = sqlite3.connect('your_database.db')
         cursor = conn.cursor()
@@ -160,6 +161,5 @@ class METClient(WeatherDataClient):
 
         # Close the database connection
         conn.close()
-
-        return observations
 """
+      

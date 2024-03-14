@@ -1,5 +1,5 @@
 import datetime
-
+import json
 from frcm.datamodel.model import FireRiskPrediction, Location, WeatherData, Observations, Forecast
 from frcm.weatherdata.client import WeatherDataClient
 import frcm.fireriskmodel.compute
@@ -24,19 +24,33 @@ class FireRiskAPI:
 
         observations = self.client.fetch_observations(location, start=start_time, end=time_now)
 
-        print(observations)
+        #print(observations)
 
         forecast = self.client.fetch_forecast(location)
 
-        print(forecast)
+        #print(forecast)
 
         wd = WeatherData(created=time_now, observations=observations, forecast=forecast)
 
-        print(wd.to_json())
+        #print(wd.to_json())
 
         prediction = self.compute(wd)
 
-        return prediction
+        print("DATATATATA")
+        # data blir gjort om til dictionary
+        data = json.loads(wd.to_json())
+        
+        #Dette er måten å bla gjennom JSON
+        for entry in data["observations"]["data"]:
+            print(f"Temperature: {entry['temperature']}")
+        #TODO: Implementere korrekt loop ovenfor
+        
+        #TODO Send til database. sqlite-> cursor -> insert
+        data_to_insert = [(entry["temperature"], entry["humidity"], entry["wind_speed"], entry["timestamp"]) for entry in data["observations"]["data"]]
+        cursor.executemany('''
+        INSERT INTO weather_data (temperature, humidity, wind_speed, timestamp) VALUES (?, ?, ?, ?)''', data_to_insert)
+        
+        return 
 
     def compute_now_period(self, location: Location, obs_delta: datetime.timedelta, fct_delta: datetime.timedelta):
         pass
