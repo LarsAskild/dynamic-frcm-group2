@@ -24,7 +24,7 @@ class FireRiskAPI:
 
         observations = self.client.fetch_observations(location, start=start_time, end=time_now)
 
-        #print(observations)
+        print(observations)
 
         forecast = self.client.fetch_forecast(location)
 
@@ -33,17 +33,17 @@ class FireRiskAPI:
         wd = WeatherData(created=time_now, observations=observations, forecast=forecast)
 
         #print(wd.to_json())
-
+        
         prediction = self.compute(wd)
-
+       
         print("DATATATATA")
         # data blir gjort om til dictionary
         data = json.loads(wd.to_json())
-        
+        #print(data)
         #Dette er måten å bla gjennom JSON
-        for entry in data["observations"]["data"]:
-            print(f"Temperature: {entry['temperature']}")
-            
+        #for entry in data["observations"]["data"]:
+            #print(f"Temperature: {entry['temperature']}")
+           
         #TODO: Implementere korrekt loop ovenfor
         #print(data)
         conn = sqlite3.connect('FireGuard_DB.sql')
@@ -53,10 +53,20 @@ class FireRiskAPI:
         latitude = location.latitude
         longitude = location.longitude
         
+        #lagre firerisks som ei liste for databasen
+        risk_list = []
+        for firerisk in prediction.firerisks:
+            risk_list.append(firerisk.ttf)
+        #print(risk_list)
+
         data_to_insert = [( entry["temperature"], entry["humidity"], entry["wind_speed"], entry["timestamp"]) for entry in data["observations"]["data"]]
         
         cursor.executemany('''
-        INSERT INTO weatherdata (latitude, longitude, temperature, humidity, wind_speed, timestamp) VALUES (?, ?, ?, ?, ?, ?)''',[(latitude, longitude,) + entry for entry in data_to_insert])
+        INSERT INTO weatherdata (latitude, longitude, temperature, humidity, wind_speed, timestamp, firerisk) VALUES (?, ?, ?, ?, ?, ?, ?)''',[(latitude, longitude,) + entry + (firerisk,) for entry, firerisk in zip(data_to_insert, risk_list)])
+        
+        #[(latitude, longitude,) + entry + (firerisk,) for entry, firerisk in zip(data_to_insert, risk_list)])
+        
+        #[(latitude, longitude,) + entry for entry in data_to_insert])
         
         conn.commit()
         conn.close()
