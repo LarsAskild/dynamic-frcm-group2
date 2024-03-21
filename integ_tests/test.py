@@ -1,75 +1,39 @@
-import datetime
+import logging
+from datetime import date, datetime, timedelta
+from unittest import TestCase, main
+import os
+#from temp_store.client import MetClient
+#from temp_store.domain import Location
+#from temp_store.store import TemperatureStore
 
 
-from frcm.weatherdata.extractor_met import METExtractor
-from frcm.weatherdata.client_met import METClient
-from frcm.datamodel.model import Location
+class IntegTest(TestCase):
+    '''
+    def test_frost_api(self):
+        client_id = os.getenv('MET_CLIENT_ID')
+        assert client_id is not None
+        lat, long = 60.36930,5.35000
+        location = Location("hvl", long, lat)
+        client = MetClient(client_id)
+        result = client.retrieve(location,date(2024, 2, 8))
+        self.assertTrue(isinstance(result, dict))
+        self.assertTrue(result.values().__iter__().__next__(), float)
 
-import unittest
-
-
-class TestClient(unittest.TestCase):
-
-    def setUp(self):
-
-        self.extractor = METExtractor()
-
-        self.client = METClient(self.extractor)
-
-        self.location = Location(latitude=60.383, longitude=5.3327)
-
-        self.station = 'SN50540'
-
-    def test_fetch_forecast_raw(self):
-
-        response = self.client.fetch_forecast_raw(self.location)
-
-        print(response.text)
-
-        self.assertEqual(response.status_code, 200)
-
-    def test_fetch_forecast(self):
-
-        forecast = self.client.fetch_forecast(self.location)
-
-        print(forecast)
-
-        self.assertTrue(True)
-
-    def test_get_nearest_station_raw(self):
-
-        response = self.client.get_nearest_station_raw(self.location)
-
-        self.assertEqual(response.status_code, 200)
-
-    def test_get_nearest_station_id(self):
-
-        station_id = self.client.get_nearest_station_id(self.location)
-
-        self.assertEqual(self.station, station_id)
-
-    def test_fetch_observations_raw(self):
-
-        start_date = datetime.datetime(year=2022, month=4, day=1)
-        end_date = datetime.datetime(year=2022, month=4, day=2)
-
-        response = self.client.fetch_observations_raw(self.station, start_date, end_date)
-
-        print(response.text)
-
-        self.assertEqual(response.status_code, 200)
-
-    def test_fetch_observations(self):
-
-        start_date = datetime.datetime(year=2022, month=4, day=1)
-        end_date = datetime.datetime(year=2022, month=4, day=2)
-
-        observations = self.client.fetch_observations(self.location, start=start_date, end=end_date)
-
-        print(observations)
-
-        self.assertTrue(True)
+    def test_full(self):
+        client_id = os.getenv('MET_CLIENT_ID')
+        assert client_id is not None
+        retriever = MetClient(client_id)
+        store = TemperatureStore()
+        store.retriver = retriever
+        loc = store.create_location("hvl", 60.36930, 5.35000)
+        ts = datetime(2024, 3, 11, 12 , 13)
+        for ts, value in retriever.retrieve(loc, ts.date()).items():
+            logging.info(f"Got {ts.isoformat()}: {value} -> storing")
+            store.store(loc, ts, value)
+        val = store.retrieve(loc.name, ts)
+        self.assertIsNotNone(val)'''
 
 
-if __name__ == '__main__':
-    unittest.main()
+
+if __name__ == "__main__":
+    main()
