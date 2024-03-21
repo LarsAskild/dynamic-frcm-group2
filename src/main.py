@@ -1,6 +1,7 @@
 import datetime
 import threading
 import time
+import sqlite3
 
 from frcm.frcapi import FireRiskAPI
 from frcm.weatherdata.client_met import METClient
@@ -39,4 +40,4 @@ if __name__ == "__main__":
     predictions = frc.compute_now(LocationGiven, obs_delta)
 
     #print(predictions)
-    
+  

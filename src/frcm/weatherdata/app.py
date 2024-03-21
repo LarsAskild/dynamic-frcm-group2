@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, session, redirect
 from geopy.geocoders import Nominatim
 import base64
+import hashlib
+import sqlite3
 
 app = Flask(__name__)
 app.secret_key = 'your-secret-key'
@@ -21,14 +23,22 @@ def login():
         username = request.form['username']
         password = request.form['password']
 
-        if username == 'admin' and password == 'password':
-            session['username'] = username
-            return redirect('/')
-        else:
-            return render_template('login.html')  # Add appropriate error message
-        
-    return render_template('login.html')  # Display login page
+        # Check if username and password match in the database
+        conn = sqlite3.connect('FireGuard_DB.sql')
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM authenticator WHERE username=?', (username,))
+        user = cursor.fetchone()
+        conn.commit()
+        conn.close()
 
+        if user is not None and username == user[0] and password == user[1]:
+            session['username'] = username
+            return redirect('/')  # Redirect to the index page after successful login
+        else:
+            return render_template('login.html', error='Invalid username or password')
+        
+    return render_template('login.html')
+      
 @app.route('/logout')
 def logout():
     session.pop('username', None)
@@ -51,34 +61,3 @@ def get_coordinates():
         }
     else:
         return {'error': 'Address not found'}, 404
-
-"""
-from flask import Flask, render_template, request
-from geopy.geocoders import Nominatim
-import base64
-
-app = Flask(__name__)
-geolocator = Nominatim(user_agent="geoapi")
-location_data = {}
-
-@app.route('/')
-def index():
-    return render_template('index.html')
-
-@app.route('/coordinates', methods=['GET'])
-def get_coordinates():
-    address = request.args.get('address')
-    location = geolocator.geocode(address)
-    if location:
-        location_data['latitude'] = location.latitude
-        location_data['longitude'] = location.longitude
-        return {
-            'latitude': location.latitude,
-            'longitude': location.longitude
-        }
-    else:
-        return {'error': 'Address not found'}, 404
-
-#if __name__ == '__main__':
-#   app.run(debug=True, port=8000)
-"""
