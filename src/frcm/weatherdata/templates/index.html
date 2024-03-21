@@ -6,7 +6,7 @@
     <title>Address to Coordinates</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font: Arial, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f4f4f4;
@@ -49,6 +49,9 @@
             border: 1px solid #ccc;
             border-radius: 4px;
         }
+        #fireRisk {
+            color: red;
+        }
     </style>
 </head>
 <body>
@@ -75,13 +78,24 @@
                 if (data.error) {
                     document.getElementById("result").innerHTML = `<p>${data.error}</p>`;
                 } else {
-                    document.getElementById("result").innerHTML = `<p>Latitude: ${data.latitude}</p><p>Longitude: ${data.longitude}</p>`;
+                    document.getElementById("result").innerHTML = `<p>Latitude: ${data.latitude}</p><p>Longitude: ${data.longitude}</p><p id="fireRisk"></p>`;
+                    getFireRisk(data.latitude, data.longitude);
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
                 document.getElementById("result").innerHTML = `<p>Something went wrong. Please try again later.</p>`;
             });
+        }
+
+        function getFireRisk(latitude, longitude) {
+            var fireRisk = calculateFireRisk(latitude, longitude);
+            document.getElementById("fireRisk").innerHTML = "FireRisk: " + fireRisk;
+        }
+
+        function calculateFireRisk(latitude, longitude) {
+            // Legg til logikk for å beregne FireRisk basert på de gitte koordinatene
+            return "High"; // Eksempel på en beregnet FireRisk
         }
     </script>
 </body>
