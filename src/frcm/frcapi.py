@@ -57,17 +57,14 @@ class FireRiskAPI:
         risk_list = []
         for firerisk in prediction.firerisks:
             risk_list.append(firerisk.ttf)
+        #print("REEEEESK")
         #print(risk_list)
 
         data_to_insert = [( entry["temperature"], entry["humidity"], entry["wind_speed"], entry["timestamp"]) for entry in data["observations"]["data"]]
         
         cursor.executemany('''
         INSERT INTO weatherdata (latitude, longitude, temperature, humidity, wind_speed, timestamp, firerisk) VALUES (?, ?, ?, ?, ?, ?, ?)''',[(latitude, longitude,) + entry + (firerisk,) for entry, firerisk in zip(data_to_insert, risk_list)])
-        
-        #[(latitude, longitude,) + entry + (firerisk,) for entry, firerisk in zip(data_to_insert, risk_list)])
-        
-        #[(latitude, longitude,) + entry for entry in data_to_insert])
-        
+             
         conn.commit()
         conn.close()
         
