@@ -12,10 +12,11 @@ This program is a simple web application that allows users to convert an address
 
 # Installation
 1. Clone the repository to your local machine.
-2. Open the repository in VS code and make sure that you are in the correct path/folder.
-3. Open the terminal in VS code.
-4. Run command: "Poetry install"
-5. Run command: "Poetry run python src/main.py"
-6. Open your web browser and navigate to http://localhost:8000 to use the program.
-7. Enter username "markus" and password "scrum"
-8. Enter desired location/adress and click "Get coordinates"
+2. Make sure to include your own .env file containing ID and password for MET-access in the main repostiry folder "dynamic-frcm-group2".
+3. Open the repository in VS code and make sure that you are in the correct path/folder.
+4. Open the terminal in VS code.
+5. Run command: "Poetry install"
+6. Run command: "Poetry run python src/main.py"
+7. Open your web browser and navigate to http://localhost:8000 to use the program.
+8. Enter username "markus" and password "scrum"
+9. Enter desired location/adress and click "Get coordinates"
