@@ -10,8 +10,12 @@ This program is a simple web application that allows users to convert an address
 ### Geopy: Geopy library is used to perform geographical searches and retrieve coordinates for a given address.
 ### HTML/CSS/JavaScript: The frontend of the application is constructed using these web technologies to create a user-friendly interface.
 
-#Installation
+# Installation
 1. Clone the repository to your local machine.
-2. Install dependencies by running pip install -r requirements.txt.
-3. Start the application by running python app.py.
-4. Open your web browser and navigate to http://localhost:5000 to use the program.
+2. Open the repository in VS code and make sure that you are in the correct path/folder.
+3. Open the terminal in VS code.
+4. Run command: "Poetry install"
+5. Run command: "Poetry run python src/main.py"
+6. Open your web browser and navigate to http://localhost:8000 to use the program.
+7. Enter username "markus" and password "scrum"
+8. Enter desired location/adress and click "Get coordinates"
