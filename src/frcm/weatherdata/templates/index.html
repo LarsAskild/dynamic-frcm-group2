@@ -77,7 +77,7 @@
             .then(data => {
                 if (data.error) {
                     document.getElementById("result").innerHTML = `<p>${data.error}</p>`;
-                } else {
+                } else {    
                     document.getElementById("result").innerHTML = `<p>Latitude: ${data.latitude}</p><p>Longitude: ${data.longitude}</p><p id="fireRisk"></p>`;
                     getFireRisk(data.latitude, data.longitude);
                 }

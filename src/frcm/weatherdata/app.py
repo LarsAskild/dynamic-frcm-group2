@@ -61,3 +61,4 @@ def get_coordinates():
         }
     else:
         return {'error': 'Address not found'}, 404
+        

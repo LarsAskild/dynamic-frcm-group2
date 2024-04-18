@@ -62,8 +62,8 @@ class FireRiskAPI:
 
         data_to_insert = [( entry["temperature"], entry["humidity"], entry["wind_speed"], entry["timestamp"]) for entry in data["observations"]["data"]]
         
-        cursor.executemany('''
-        INSERT INTO weatherdata (latitude, longitude, temperature, humidity, wind_speed, timestamp, firerisk) VALUES (?, ?, ?, ?, ?, ?, ?)''',[(latitude, longitude,) + entry + (firerisk,) for entry, firerisk in zip(data_to_insert, risk_list)])
+        #cursor.executemany('''
+        #INSERT INTO weatherdata (latitude, longitude, temperature, humidity, wind_speed, timestamp, firerisk) VALUES (?, ?, ?, ?, ?, ?, ?)''',[(latitude, longitude,) + entry + (firerisk,) for entry, firerisk in zip(data_to_insert, risk_list)])
              
         conn.commit()
         conn.close()
