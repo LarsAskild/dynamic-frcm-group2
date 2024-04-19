@@ -59,15 +59,30 @@ class FireRiskAPI:
             risk_list.append(firerisk.ttf)
         #print("REEEEESK")
         #print(risk_list)
-
+        
         data_to_insert = [( entry["temperature"], entry["humidity"], entry["wind_speed"], entry["timestamp"]) for entry in data["observations"]["data"]]
-        
-        #cursor.executemany('''
-        #INSERT INTO weatherdata (latitude, longitude, temperature, humidity, wind_speed, timestamp, firerisk) VALUES (?, ?, ?, ?, ?, ?, ?)''',[(latitude, longitude,) + entry + (firerisk,) for entry, firerisk in zip(data_to_insert, risk_list)])
-             
-        conn.commit()
+     
+        for entry, firerisk in zip(data_to_insert, risk_list):
+    # Create a query to check if the entry exists in the database
+            cursor.execute('''
+            SELECT EXISTS(SELECT 1 FROM weatherdata
+            WHERE latitude=? AND longitude=? AND timestamp=?
+        )
+        ''', (latitude, longitude, entry[3]))  # Note that entry[3] is the timestamp
+
+        entry_exists = cursor.fetchone()[0]  # fetchone() returns a tuple
+
+        if not entry_exists:
+            cursor.execute('''
+                INSERT INTO weatherdata 
+                (latitude, longitude, temperature, humidity, wind_speed, timestamp, firerisk) 
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            ''', (latitude, longitude,) + entry + (firerisk,))
+            conn.commit()
+        else: 
+            print("Values already exist in database")
         conn.close()
-        
+
         return prediction
 
     def compute_now_period(self, location: Location, obs_delta: datetime.timedelta, fct_delta: datetime.timedelta):
