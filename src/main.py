@@ -27,7 +27,6 @@ if __name__ == "__main__":
             obs_delta = datetime.timedelta(days=2)
             predictions = frc.compute_now(LocationGiven, obs_delta)
             location_data.clear()
-            print("Hei")
         
         
         time.sleep(0.5)    
