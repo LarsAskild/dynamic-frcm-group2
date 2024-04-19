@@ -48,6 +48,7 @@ jobs:
     - name: Install dependencies
       run: |
         poetry install
+        poetry install --with test
     - name: Unit Test with pytest
       env:
         MET_CLIENT_ID: ${{ secrets.MET_CLIENT_ID }}
