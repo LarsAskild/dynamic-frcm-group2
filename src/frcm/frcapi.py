@@ -18,71 +18,54 @@ class FireRiskAPI:
         return frcm.fireriskmodel.compute.compute(wd)
 
     def compute_now(self, location: Location, obs_delta: datetime.timedelta) -> FireRiskPrediction:
+    
+        # Connect to the database
+        conn = sqlite3.connect('FireGuard_DB.sql')
+        cursor = conn.cursor()    
 
         time_now = datetime.datetime.now()
         start_time = time_now - obs_delta
-
-        observations = self.client.fetch_observations(location, start=start_time, end=time_now)
-
-        print(observations)
-
-        forecast = self.client.fetch_forecast(location)
-
-        #print(forecast)
-
-        wd = WeatherData(created=time_now, observations=observations, forecast=forecast)
-
-        #print(wd.to_json())
-        
-        prediction = self.compute(wd)
-       
-        print("DATATATATA")
-        # data blir gjort om til dictionary
-        data = json.loads(wd.to_json())
-        #print(data)
-        #Dette er måten å bla gjennom JSON
-        #for entry in data["observations"]["data"]:
-            #print(f"Temperature: {entry['temperature']}")
-           
-        #TODO: Implementere korrekt loop ovenfor
-        #print(data)
-        conn = sqlite3.connect('FireGuard_DB.sql')
-        cursor = conn.cursor()
-
-        #TODO Send til database. sqlite-> cursor -> insert
         latitude = location.latitude
         longitude = location.longitude
+
         
-        #lagre firerisks som ei liste for databasen
-        risk_list = []
-        for firerisk in prediction.firerisks:
-            risk_list.append(firerisk.ttf)
-        #print("REEEEESK")
-        #print(risk_list)
-        
-        data_to_insert = [( entry["temperature"], entry["humidity"], entry["wind_speed"], entry["timestamp"]) for entry in data["observations"]["data"]]
-     
+        observations = self.client.fetch_observations(location, start=start_time, end=time_now)
+        print(observations)
+        forecast = self.client.fetch_forecast(location)
+
+        wd = WeatherData(created=time_now, observations=observations, forecast=forecast)
+        prediction = self.compute(wd)
+
+        # Extract firerisks from prediction
+        risk_list = [firerisk.ttf for firerisk in prediction.firerisks]
+
+        # Prepare data for insertion into database
+        data = json.loads(wd.to_json())
+        data_to_insert = [(entry["temperature"], entry["humidity"], entry["wind_speed"], entry["timestamp"]) for entry in data["observations"]["data"]]
+
+        # Check if records already exist with the same primary key
         for entry, firerisk in zip(data_to_insert, risk_list):
-    # Create a query to check if the entry exists in the database
-            cursor.execute('''
-            SELECT EXISTS(SELECT 1 FROM weatherdata
-            WHERE latitude=? AND longitude=? AND timestamp=?
+            lat, lon, temp, humidity, wind_speed, timestamp = (latitude, longitude,) + entry
+            cursor.execute(
+            'SELECT EXISTS(SELECT 1 FROM weatherdata WHERE latitude=? AND longitude=? AND timestamp=?)',
+            (lat, lon, timestamp)
         )
-        ''', (latitude, longitude, entry[3]))  # Note that entry[3] is the timestamp
+        exists = cursor.fetchone()[0]
 
-        entry_exists = cursor.fetchone()[0]  # fetchone() returns a tuple
-
-        if not entry_exists:
-            cursor.execute('''
-                INSERT INTO weatherdata 
-                (latitude, longitude, temperature, humidity, wind_speed, timestamp, firerisk) 
-                VALUES (?, ?, ?, ?, ?, ?, ?)
-            ''', (latitude, longitude,) + entry + (firerisk,))
-            conn.commit()
-        else: 
-            print("Values already exist in database")
+        if not exists:
+            # Insert data into database  
+            cursor.execute(
+                'INSERT INTO weatherdata (latitude, longitude, temperature, humidity, wind_speed, timestamp, firerisk) '
+                'VALUES (?, ?, ?, ?, ?, ?, ?)',
+                (lat, lon, temp, humidity, wind_speed, timestamp, firerisk)
+            )
+            print("Entries have been added to database")
+        else:
+            print("Entries already exist in database")
+       
+        conn.commit()
         conn.close()
-
+        
         return prediction
 
     def compute_now_period(self, location: Location, obs_delta: datetime.timedelta, fct_delta: datetime.timedelta):
@@ -94,4 +77,4 @@ class FireRiskAPI:
     def compute_period_delta(self, location: Location, start: datetime, delta: datetime.timedelta) -> FireRiskPrediction:
         pass
 
-
+ 
