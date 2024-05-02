@@ -7,7 +7,7 @@ R.D: Strand and L.M. Kristensen. *An implementation, evaluation and validation o
 which uses forecast and weather data observation for computing fire risk indication in the form of time-to-flash-over (ttf) for wooden houses. 
 
 # Installation
-
+## Poetry
 The project is based on using the [Poetry package manager](https://python-poetry.org/).
 
 Start by installing Poetry for your platform using the [installation instructions](https://python-poetry.org/docs/#installation)
@@ -19,6 +19,11 @@ To install the required Python packages use:
 ```
 poetry install
 ```
+
+## Docker
+Install docker from https://www.docker.com/products/docker-desktop/
+
+
 # Overview
 
 The implementation is organised into the following main folders:
@@ -72,6 +77,14 @@ or running a specific test within a test-file using, e.g.,
 ```
 pytest test_datamodel.py::TestDataModel::test_validate
 ```
+## Running as a container
+Making sure the dependencies are installed through poetry
+
+docker compose build
+
+docker compose up
+
+The application should now be running as a container
 
 # Application integration
 
