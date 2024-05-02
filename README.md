@@ -80,6 +80,8 @@ pytest test_datamodel.py::TestDataModel::test_validate
 ## Running as a container
 Making sure the dependencies are installed through poetry
 
+Docker desktop must be running as you bash the following in Powershell:
+
 ```
 docker compose build
 ```
