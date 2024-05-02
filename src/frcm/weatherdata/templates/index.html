@@ -78,8 +78,8 @@
                 if (data.error) {
                     document.getElementById("result").innerHTML = `<p>${data.error}</p>`;
                 } else {    
-                    document.getElementById("result").innerHTML = `<p>Latitude: ${data.latitude}</p><p>Longitude: ${data.longitude}</p><p id="fireRisk"></p>`;
-                    getFireRisk(data.latitude, data.longitude);
+                    document.getElementById("result").innerHTML = `<p>Latitude: ${data.latitude}</p><p>Longitude: ${data.longitude}</p><p>FireRisk: ${data.avg_FR}</p>`;  
+                    //getFireRisk(data.latitude, data.longitude);
                 }
             })
             .catch(error => {
@@ -93,9 +93,12 @@
             document.getElementById("fireRisk").innerHTML = "FireRisk: " + fireRisk;
         }
 
+    
         function calculateFireRisk(latitude, longitude) {
             // Legg til logikk for å beregne FireRisk basert på de gitte koordinatene
-            return "High"; // Eksempel på en beregnet FireRisk
+            //random = 0;
+            //random = math.random(3,7);
+            return 1  // Eksempel på en beregnet FireRisk
         }
     </script>
 </body>
