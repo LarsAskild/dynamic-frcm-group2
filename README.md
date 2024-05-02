@@ -80,9 +80,13 @@ pytest test_datamodel.py::TestDataModel::test_validate
 ## Running as a container
 Making sure the dependencies are installed through poetry
 
+```
 docker compose build
+```
 
+```
 docker compose up
+```
 
 The application should now be running as a container
 
