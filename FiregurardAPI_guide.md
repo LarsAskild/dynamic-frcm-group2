@@ -10,18 +10,6 @@ This program is a simple web application that allows users to convert an address
 ### Geopy: Geopy library is used to perform geographical searches and retrieve coordinates for a given address.
 ### HTML/CSS/JavaScript: The frontend of the application is constructed using these web technologies to create a user-friendly interface.
 
-# Installation
-1. Clone the repository to your local machine.
-2. Make sure to include your own .env file containing ID and password for MET-access in the main repostiry folder "dynamic-frcm-group2".
-3. Open the repository in VS code and make sure that you are in the correct path/folder.
-4. Open the terminal in VS code.
-5. Run command: "Poetry install"
-6. Run command: "Poetry run python src/main.py"
-7. Open your web browser and navigate to http://localhost:8000 to use the program.
-8. Enter username "markus" and password "scrum"
-9. Enter desired location/adress and click "Get coordinates"
-
-
 
 # Installation
 
@@ -84,5 +72,18 @@ To install and run this program, please follow the step-by-step instructions pro
 1. Once logged in, you will be directed to the program's main interface.
 2. Enter the desired location/address in the appropriate field.
 3. Click the "Get coordinates" button to retrieve the coordinates for the location.
+
+# Using Postman with Docker
+If the application is running in Docker, you can also access the API using Postman for GET and POST requests.
+
+## Login
+1. Make a POST request to http://localhost:8000/login with the following body parameters:
+  -   Username: 'markus'
+  -   Password: 'scrum'
+2. After a successful login, you can send GET requests to access the main functionality.
+
+## Get Coordinates
+1. Use the following GET request http://localhost:8000/coordinates?address=Bergen, replacing 'Bergen' with your desired address.
+
 
 That's it! You have successfully installed and set up the program on your local machine. You can now use it as per your requirements.
