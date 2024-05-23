@@ -3,7 +3,7 @@ import sys
 import os
 
 # Add the app directory to the sys.path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'frcm')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src', 'frcm')))
 from app import app
 
 @pytest.fixture
