@@ -45,6 +45,7 @@ jobs:
         pipx install poetry
         pip uninstall decouple
         pip install python-decouple
+        pip install pytest pytest-flask requests
     - name: Install dependencies
       run: |
         poetry install
